@@ -15,7 +15,7 @@ class_names = ['Cardboard', 'Glass', 'Metal', 'Paper', 'Plastic', 'Trash']
 # Sidebar
 st.sidebar.title("About")
 st.sidebar.markdown("""
-This is a **Garbage Classification App** using a MobileNetV3Large model trained on 6 types of garbage categories.
+This is a **Garbage Classifier** using a MobileNetV3Large model trained on 6 types of garbage categories.
 - Built with 🧠 TensorFlow
 - UI by 🚀 Streamlit
 """)
@@ -25,14 +25,22 @@ st.sidebar.markdown("---")
 st.sidebar.info("Upload an image of trash to predict the type.")
 
 # Main app
-st.title("Garbage Classification App")
+st.title("Garbage Classifier")
 st.write("Upload an image and I will predict the type of garbage.")
+
+# Camera input
+camera_photo = st.camera_input("Take a photo")
 
 # Upload file
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-if uploaded_file is not None:
+image = None
+if camera_photo is not None:
+    image = Image.open(camera_photo).convert('RGB')
+elif uploaded_file is not None:
     image = Image.open(uploaded_file).convert('RGB')
+    
+if image:
 
     # Preprocess the image
     img = image.resize(image_size)
